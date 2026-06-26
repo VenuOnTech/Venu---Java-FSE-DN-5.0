@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Scanner;
 
 class Product {
     private int productId;
@@ -26,9 +27,9 @@ class Product {
 
     @Override
     public String toString() {
-        return "Product ID: " + productId +
-                ", Name: " + productName +
-                ", Category: " + category;
+        return "Product ID      : " + productId +
+                "\nProduct Name    : " + productName +
+                "\nCategory        : " + category;
     }
 }
 
@@ -36,6 +37,7 @@ public class EcommercePlatformSearch {
 
     // Linear Search
     public static Product linearSearch(Product[] products, int productId) {
+
         for (Product product : products) {
             if (product.getProductId() == productId) {
                 return product;
@@ -46,10 +48,12 @@ public class EcommercePlatformSearch {
 
     // Binary Search
     public static Product binarySearch(Product[] products, int productId) {
+
         int low = 0;
         int high = products.length - 1;
 
         while (low <= high) {
+
             int mid = (low + high) / 2;
 
             if (products[mid].getProductId() == productId) {
@@ -60,38 +64,83 @@ public class EcommercePlatformSearch {
                 high = mid - 1;
             }
         }
+
         return null;
+    }
+
+    // Display Products
+    public static void displayProducts(Product[] products) {
+
+        System.out.println("\n--------------- Product List ---------------");
+
+        for (Product product : products) {
+            System.out.println(product);
+            System.out.println("--------------------------------------------");
+        }
     }
 
     public static void main(String[] args) {
 
-        Product[] products = {
-                new Product(103, "Keyboard", "Accessories"),
-                new Product(101, "Laptop", "Electronics"),
-                new Product(105, "Monitor", "Electronics"),
-                new Product(102, "Mouse", "Accessories"),
-                new Product(104, "Printer", "Office")
-        };
+        Scanner sc = new Scanner(System.in);
 
-        // Linear Search
-        System.out.println("Linear Search:");
-        Product result = linearSearch(products, 102);
+        System.out.print("Enter the number of products: ");
+        int n = sc.nextInt();
+        sc.nextLine();
 
-        if (result != null)
+        Product[] products = new Product[n];
+
+        System.out.println("\nEnter Product Details");
+
+        for (int i = 0; i < n; i++) {
+
+            System.out.println("\nProduct " + (i + 1));
+
+            System.out.print("Enter Product ID: ");
+            int id = sc.nextInt();
+            sc.nextLine();
+
+            System.out.print("Enter Product Name: ");
+            String name = sc.nextLine();
+
+            System.out.print("Enter Product Category: ");
+            String category = sc.nextLine();
+
+            products[i] = new Product(id, name, category);
+        }
+
+        displayProducts(products);
+
+        System.out.print("\nEnter Product ID to search using Linear Search: ");
+        int searchId = sc.nextInt();
+
+        Product result = linearSearch(products, searchId);
+
+        System.out.println("\n========== Linear Search Result ==========");
+
+        if (result != null) {
+            System.out.println("Product Found!");
             System.out.println(result);
-        else
+        } else {
             System.out.println("Product not found.");
+        }
 
-        // Sort array for Binary Search
+        // Sort before Binary Search
         Arrays.sort(products, Comparator.comparingInt(Product::getProductId));
 
-        // Binary Search
-        System.out.println("\nBinary Search:");
-        result = binarySearch(products, 102);
+        System.out.print("\nEnter Product ID to search using Binary Search: ");
+        searchId = sc.nextInt();
 
-        if (result != null)
+        result = binarySearch(products, searchId);
+
+        System.out.println("\n========== Binary Search Result ==========");
+
+        if (result != null) {
+            System.out.println("Product Found!");
             System.out.println(result);
-        else
+        } else {
             System.out.println("Product not found.");
+        }
+
+        sc.close();
     }
 }
