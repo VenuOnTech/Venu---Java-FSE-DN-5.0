@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 // Product Class
 class Product {
@@ -61,12 +62,11 @@ public class InventoryManagement {
     // Add Product
     public void addProduct(Product product) {
         inventory.put(product.getProductId(), product);
-        System.out.println("Product added successfully.");
+        System.out.println("Product added successfully!");
     }
 
     // Update Product
-    public void updateProduct(int productId, String productName,
-                              int quantity, double price) {
+    public void updateProduct(int productId, String productName, int quantity, double price) {
 
         if (inventory.containsKey(productId)) {
 
@@ -76,9 +76,9 @@ public class InventoryManagement {
             product.setQuantity(quantity);
             product.setPrice(price);
 
-            System.out.println("Product updated successfully.");
+            System.out.println("Product updated successfully!");
         } else {
-            System.out.println("Product not found.");
+            System.out.println("Product ID " + productId + " not found.");
         }
     }
 
@@ -87,9 +87,9 @@ public class InventoryManagement {
 
         if (inventory.containsKey(productId)) {
             inventory.remove(productId);
-            System.out.println("Product deleted successfully.");
+            System.out.println("Product deleted successfully!");
         } else {
-            System.out.println("Product not found.");
+            System.out.println("Product ID " + productId + " not found.");
         }
     }
 
@@ -97,48 +97,107 @@ public class InventoryManagement {
     public void displayInventory() {
 
         if (inventory.isEmpty()) {
-            System.out.println("Inventory is empty.");
+            System.out.println("\nInventory is empty.");
             return;
         }
 
-        System.out.println("\n---------------- Inventory ----------------");
-        System.out.println("ID\tName\t\tQuantity\tPrice");
+        System.out.println("\n================ CURRENT INVENTORY ================");
+        System.out.printf("%-10s %-20s %-10s %-10s%n",
+                "ID", "Product Name", "Quantity", "Price");
 
         for (Product product : inventory.values()) {
-
-            System.out.println(
-                    product.getProductId() + "\t"
-                            + product.getProductName() + "\t\t"
-                            + product.getQuantity() + "\t\t"
-                            + product.getPrice());
+            System.out.printf("%-10d %-20s %-10d %-10.2f%n",
+                    product.getProductId(),
+                    product.getProductName(),
+                    product.getQuantity(),
+                    product.getPrice());
         }
 
-        System.out.println("-------------------------------------------");
+        System.out.println("===================================================\n");
     }
 
-    // Main Method (Testing)
+    // Main Method
     public static void main(String[] args) {
 
+        Scanner sc = new Scanner(System.in);
         InventoryManagement inventory = new InventoryManagement();
 
-        // Add Products
-        inventory.addProduct(new Product(101, "Laptop", 10, 65000));
-        inventory.addProduct(new Product(102, "Mouse", 50, 600));
-        inventory.addProduct(new Product(103, "Keyboard", 30, 1200));
+        int choice;
 
-        // Display Inventory
-        inventory.displayInventory();
+        do {
+            System.out.println("\n========= INVENTORY MANAGEMENT SYSTEM =========");
+            System.out.println("1. Add Product");
+            System.out.println("2. Update Product");
+            System.out.println("3. Delete Product");
+            System.out.println("4. Display Inventory");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
 
-        // Update Product
-        inventory.updateProduct(102, "Wireless Mouse", 45, 750);
+            choice = sc.nextInt();
 
-        // Display Inventory
-        inventory.displayInventory();
+            switch (choice) {
 
-        // Delete Product
-        inventory.deleteProduct(103);
+                case 1:
+                    System.out.println("\n----- Add New Product -----");
 
-        // Display Inventory
-        inventory.displayInventory();
+                    System.out.print("Enter Product ID: ");
+                    int id = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print("Enter Product Name: ");
+                    String name = sc.nextLine();
+
+                    System.out.print("Enter Quantity: ");
+                    int quantity = sc.nextInt();
+
+                    System.out.print("Enter Price: ");
+                    double price = sc.nextDouble();
+
+                    inventory.addProduct(new Product(id, name, quantity, price));
+                    break;
+
+                case 2:
+                    System.out.println("\n----- Update Product -----");
+
+                    System.out.print("Enter Product ID to Update: ");
+                    int updateId = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print("Enter New Product Name: ");
+                    String updateName = sc.nextLine();
+
+                    System.out.print("Enter New Quantity: ");
+                    int updateQuantity = sc.nextInt();
+
+                    System.out.print("Enter New Price: ");
+                    double updatePrice = sc.nextDouble();
+
+                    inventory.updateProduct(updateId, updateName, updateQuantity, updatePrice);
+                    break;
+
+                case 3:
+                    System.out.println("\n----- Delete Product -----");
+
+                    System.out.print("Enter Product ID to Delete: ");
+                    int deleteId = sc.nextInt();
+
+                    inventory.deleteProduct(deleteId);
+                    break;
+
+                case 4:
+                    inventory.displayInventory();
+                    break;
+
+                case 5:
+                    System.out.println("\nThank you for using Inventory Management System.");
+                    break;
+
+                default:
+                    System.out.println("\nInvalid choice! Please enter a number between 1 and 5.");
+            }
+
+        } while (choice != 5);
+
+        sc.close();
     }
 }
