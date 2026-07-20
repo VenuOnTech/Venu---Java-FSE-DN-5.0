@@ -2,57 +2,56 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-// Product Class
-class Product {
-
-    private int productId;
-    private String productName;
-    private int quantity;
-    private double price;
-
-    // Constructor
-    public Product(int productId, String productName, int quantity, double price) {
-        this.productId = productId;
-        this.productName = productName;
-        this.quantity = quantity;
-        this.price = price;
-    }
-
-    // Getters
-    public int getProductId() {
-        return productId;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    // Setters
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-}
-
-// Inventory Management Class
+// Inventory ManagemenClass
 public class InventoryManagement {
 
-    private Map<Integer, Product> inventory;
+    public static class Product {
+
+        private final int productId;
+        private String productName;
+        private int quantity;
+        private double price;
+
+        // Constructor
+        public Product(int productId, String productName, int quantity, double price) {
+            this.productId = productId;
+            this.productName = productName;
+            this.quantity = quantity;
+            this.price = price;
+        }
+
+        // Getters
+        public int getProductId() {
+            return productId;
+        }
+
+        public String getProductName() {
+            return productName;
+        }
+
+        public int getQuantity() {
+            return quantity;
+        }
+
+        public double getPrice() {
+            return price;
+        }
+
+        // Setters
+        public void setProductName(String productName) {
+            this.productName = productName;
+        }
+
+        public void setQuantity(int quantity) {
+            this.quantity = quantity;
+        }
+
+        public void setPrice(double price) {
+            this.price = price;
+        }
+    }
+
+    private final Map<Integer, Product> inventory;
 
     // Constructor
     public InventoryManagement() {
@@ -119,85 +118,73 @@ public class InventoryManagement {
     // Main Method
     public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
-        InventoryManagement inventory = new InventoryManagement();
+        try (Scanner sc = new Scanner(System.in)) {
+            InventoryManagement inventory = new InventoryManagement();
 
-        int choice;
+            int choice;
 
-        do {
-            System.out.println("\n========= INVENTORY MANAGEMENT SYSTEM =========");
-            System.out.println("1. Add Product");
-            System.out.println("2. Update Product");
-            System.out.println("3. Delete Product");
-            System.out.println("4. Display Inventory");
-            System.out.println("5. Exit");
-            System.out.print("Enter your choice: ");
+            do {
+                System.out.println("\n========= INVENTORY MANAGEMENT SYSTEM =========");
+                System.out.println("1. Add Product");
+                System.out.println("2. Update Product");
+                System.out.println("3. Delete Product");
+                System.out.println("4. Display Inventory");
+                System.out.println("5. Exit");
+                System.out.print("Enter your choice: ");
 
-            choice = sc.nextInt();
+                choice = sc.nextInt();
 
-            switch (choice) {
+                switch (choice) {
+                    case 1 -> {
+                        System.out.println("\n----- Add New Product -----");
 
-                case 1:
-                    System.out.println("\n----- Add New Product -----");
+                        System.out.print("Enter Product ID: ");
+                        int id = sc.nextInt();
+                        sc.nextLine();
 
-                    System.out.print("Enter Product ID: ");
-                    int id = sc.nextInt();
-                    sc.nextLine();
+                        System.out.print("Enter Product Name: ");
+                        String name = sc.nextLine();
 
-                    System.out.print("Enter Product Name: ");
-                    String name = sc.nextLine();
+                        System.out.print("Enter Quantity: ");
+                        int quantity = sc.nextInt();
 
-                    System.out.print("Enter Quantity: ");
-                    int quantity = sc.nextInt();
+                        System.out.print("Enter Price: ");
+                        double price = sc.nextDouble();
 
-                    System.out.print("Enter Price: ");
-                    double price = sc.nextDouble();
+                        inventory.addProduct(new Product(id, name, quantity, price));
+                    }
+                    case 2 -> {
+                        System.out.println("\n----- Update Product -----");
 
-                    inventory.addProduct(new Product(id, name, quantity, price));
-                    break;
+                        System.out.print("Enter Product ID to Update: ");
+                        int updateId = sc.nextInt();
+                        sc.nextLine();
 
-                case 2:
-                    System.out.println("\n----- Update Product -----");
+                        System.out.print("Enter New Product Name: ");
+                        String updateName = sc.nextLine();
 
-                    System.out.print("Enter Product ID to Update: ");
-                    int updateId = sc.nextInt();
-                    sc.nextLine();
+                        System.out.print("Enter New Quantity: ");
+                        int updateQuantity = sc.nextInt();
 
-                    System.out.print("Enter New Product Name: ");
-                    String updateName = sc.nextLine();
+                        System.out.print("Enter New Price: ");
+                        double updatePrice = sc.nextDouble();
 
-                    System.out.print("Enter New Quantity: ");
-                    int updateQuantity = sc.nextInt();
+                        inventory.updateProduct(updateId, updateName, updateQuantity, updatePrice);
+                    }
+                    case 3 -> {
+                        System.out.println("\n----- Delete Product -----");
 
-                    System.out.print("Enter New Price: ");
-                    double updatePrice = sc.nextDouble();
+                        System.out.print("Enter Product ID to Delete: ");
+                        int deleteId = sc.nextInt();
 
-                    inventory.updateProduct(updateId, updateName, updateQuantity, updatePrice);
-                    break;
+                        inventory.deleteProduct(deleteId);
+                    }
+                    case 4 -> inventory.displayInventory();
+                    case 5 -> System.out.println("\nThank you for using Inventory Management System.");
+                    default -> System.out.println("\nInvalid choice! Please enter a number between 1 and 5.");
+                }
 
-                case 3:
-                    System.out.println("\n----- Delete Product -----");
-
-                    System.out.print("Enter Product ID to Delete: ");
-                    int deleteId = sc.nextInt();
-
-                    inventory.deleteProduct(deleteId);
-                    break;
-
-                case 4:
-                    inventory.displayInventory();
-                    break;
-
-                case 5:
-                    System.out.println("\nThank you for using Inventory Management System.");
-                    break;
-
-                default:
-                    System.out.println("\nInvalid choice! Please enter a number between 1 and 5.");
-            }
-
-        } while (choice != 5);
-
-        sc.close();
+            } while (choice != 5);
+        }
     }
 }
